@@ -1,1 +1,129 @@
-# Chinese-Exam
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elementary Chinese: 3-Month Progress Exam</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #34495e; --accent: #e67e22; --success: #27ae60; --light: #ecf0f1; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: var(--primary); }
+        .header { background: var(--primary); color: white; padding: 1rem; position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .card { background: white; border-radius: 12px; shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; padding: 30px; margin-bottom: 20px; display: none; }
+        .card.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .timer { font-weight: bold; font-size: 1.2rem; color: #e74c3c; }
+        .progress-bar { background: #eee; height: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .progress-fill { background: var(--success); height: 100%; width: 0%; border-radius: 5px; transition: 0.3s; }
+        
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.3s; background: var(--primary); color: white; }
+        .btn:hover { background: var(--accent); }
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .option-btn { padding: 15px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; text-align: left; }
+        
+        .vocab-big { font-size: 3.5rem; text-align: center; margin: 20px 0; color: var(--secondary); }
+        .scramble-zone { border: 2px dashed #ccc; min-height: 60px; display: flex; gap: 10px; padding: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+        .chip { background: #eee; padding: 8px 15px; border-radius: 20px; cursor: pointer; }
+        
+        #results { text-align: center; }
+        .score-circle { font-size: 4rem; color: var(--success); margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div><strong>Student:</strong> Beginner Level</div>
+    <div class="timer" id="timer">Time: 60:00</div>
+</div>
+
+<div class="container">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <!-- Start Page -->
+    <div class="card active" id="page-start">
+        <h1>Welcome to your Mid-Term Exam</h1>
+        <p>This exam covers: Greetings, School Life, and Basic Verbs.</p>
+        <p><strong>Time limit:</strong> 60 Minutes</p>
+        <p>Ensure your microphone is working for the speaking section.</p>
+        <button class="btn" onclick="nextPage(1)">Start Exam</button>
+    </div>
+
+    <!-- Section 1: Vocabulary -->
+    <div class="card" id="page-1">
+        <h2>Section 1: Character Recognition</h2>
+        <p>老师 means?</p>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">Teacher</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">Student</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">School</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">Person</button>
+        </div>
+        <button class="btn" onclick="nextPage(2)">Next</button>
+    </div>
+
+    <div class="card" id="page-2">
+        <h2>Section 1: Character Recognition</h2>
+        <p>Which word means "Tomorrow"?</p>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">明天</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">早上</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">再见</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">上课</button>
+        </div>
+        <button class="btn" onclick="nextPage(6)">Next Section</button>
+    </div>
+
+    <!-- Extra Vocabulary -->
+    <div class="card" id="page-6">
+        <h2>Section 1: Extra Vocabulary</h2>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">忙 - Busy</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">对不起 - Sorry</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">再见 - Goodbye</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">我 - I / Me</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">大 - Big</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">朋友 - Friend</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">问 - Ask</button>
+            <button class="option-btn" onclick="recordAnswer(1,true)">去 - Go</button>
+        </div>
+        <button class="btn" onclick="nextPage(7)">Next Section</button>
+    </div>
+
+    <!-- Section 2: Listening -->
+    <div class="card" id="page-7">
+        <h2>Section 2: Listening</h2>
+        <button class="btn" onclick="playAudio('你有好朋友吗？')">🔊 Play</button>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">Do you have good friends?</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">Are you busy?</button>
+        </div>
+        <button class="btn" onclick="nextPage(8)">Next</button>
+    </div>
+
+    <div class="card" id="page-8">
+        <h2>Section 2: Listening</h2>
+        <button class="btn" onclick="playAudio('我常问他问题')">🔊 Play</button>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">I often ask him questions.</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">He often calls me.</button>
+        </div>
+        <button class="btn" onclick="nextPage(9)">Next</button>
+    </div>
+
+    <div class="card" id="page-9">
+        <h2>Section 2: Listening</h2>
+        <button class="btn" onclick="playAudio('你去上课吗？')">🔊 Play</button>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">Are you going to class?</button>
+            <button class="option-btn" onclick="recordAnswer(1,false)">Do you have homework?</button>
+        </div>
+        <button class="btn" onclick="nextPage(10)">Next</button>
+    </div>
+
+    <div class="card" id="page-10">
+        <h2>Section 2: Listening</h2>
+        <button class="btn" onclick="playAudio('明天见')">🔊 Play</button>
+        <div class="option-grid">
+            <button class="option-btn" onclick="recordAnswer(1,true)">See you tomorrow.</button
